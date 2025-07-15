@@ -72,8 +72,19 @@ for i, simu in enumerate(simulations):
     all_rmse_ua.extend(rmse_ua)
 
     plt.scatter(delta_flux, rmse_ua, label=f'{simu} flux', marker='s', color=colors[i])
-# Perform linear regression
 
+    # Perform linear regression for each simulation
+    delta_flux = delta_flux.reshape(-1, 1)
+    reg_simu = LinearRegression().fit(delta_flux, rmse_ua)
+    slope_simu = reg_simu.coef_[0]
+    intercept_simu = reg_simu.intercept_
+
+    # Plot the regression line for each simulation
+    x_vals_simu = np.linspace(min(delta_flux), max(delta_flux), 100).reshape(-1, 1)
+    y_vals_simu = reg_simu.predict(x_vals_simu)
+    plt.plot(x_vals_simu, y_vals_simu, color=colors[i], linestyle='--', label=f'{simu} Regression\n(slope={slope_simu:.4f})')
+
+# Perform overall linear regression
 all_delta_flux = np.array(all_delta_flux).reshape(-1, 1)
 all_rmse_ua = np.array(all_rmse_ua)
 
@@ -81,16 +92,16 @@ reg = LinearRegression().fit(all_delta_flux, all_rmse_ua)
 slope = reg.coef_[0]
 intercept = reg.intercept_
 
-# Plot the regression line
+# Plot the overall regression line
 x_vals = np.linspace(min(all_delta_flux), max(all_delta_flux), 100).reshape(-1, 1)
 y_vals = reg.predict(x_vals)
 
-plt.plot(x_vals, y_vals, color='grey', linestyle='--', label=f'Linear Regression\n(slope={slope:.2f}, intercept={intercept:.2f})')
+plt.plot(x_vals, y_vals, color='grey', linestyle='-', label=f'Overall Regression\n(slope={slope:.4f}, intercept={intercept:.4f})')
 plt.xlabel(r'$\Delta F = |F_{comparison} - F_{target}|$', fontsize = 20)
 plt.ylabel('RMSE', fontsize = 20)
 plt.title('RMSE over relative ice flux at the grounding line in Amundsen', fontsize = 25, weight='bold')
 plt.legend()
-plt.savefig('RMSE_flux.png', dpi=300)
+plt.savefig('RMSE_flux_reg.png', dpi=300)
 
 
 
