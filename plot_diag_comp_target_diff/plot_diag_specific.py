@@ -184,6 +184,14 @@ axes[2, 0].tick_params(axis='both', which='major', labelsize=20)
 axes[2, 0].set_aspect('equal')
 axes[2, 0].set_title("Grounded mask difference", fontsize=25, fontweight='bold')
 
+# Add legend for the color mapping
+handles_diff = [
+    plt.Line2D([0], [0], marker='s', color='w', markerfacecolor='darkblue', markersize=10, label='Floating on comparison'),
+    plt.Line2D([0], [0], marker='s', color='w', markerfacecolor='antiquewhite', markersize=10, label='Same state'),
+    plt.Line2D([0], [0], marker='s', color='w', markerfacecolor='brown', markersize=10, label='Floating on target'),
+]
+axes[2, 0].legend(handles=handles_diff, loc='upper right', fontsize=14)
+
 diff_surface = surface_mask_target - surface_mask_comp
 pcm8 = axes[2, 1].pcolormesh(diff_surface.x, diff_surface.y, diff_surface, cmap='coolwarm', shading='auto', vmin=-np.nanmax(np.abs(diff_surface)), vmax=np.nanmax(np.abs(diff_surface)))
 axes[2, 1].set_ylim(-1.0e6, 0.25e6)
