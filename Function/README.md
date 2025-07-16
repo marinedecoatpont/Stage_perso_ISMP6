@@ -1,0 +1,1 @@
+This directory host the local library `ISMIP6_function` used in the various scripts.
