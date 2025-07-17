@@ -1,0 +1,1 @@
+In this directory the internal model comparison of NORCE_CISM and the RMSE over relative ice flux at the grounding line with UNN Uà as a target.
